@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: climbr-viz
+data:
+  flask_env: "production"
+  backend_url: "http://backend-service:5000"
+  log_level: "INFO"

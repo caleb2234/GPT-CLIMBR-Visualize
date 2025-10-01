@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: access-instructions
+  namespace: climbr-viz
+data:
+  README.txt: |
+    # How to Access the Application
+
+    ## Cloud Environment (LoadBalancer):
+    kubectl get svc frontend-service -n climbr-viz
+    # Look for EXTERNAL-IP, then visit: http://<EXTERNAL-IP>
+
+    ## Local/On-Prem (NodePort):
+    kubectl get nodes -o wide
+    # Visit: http://<NODE-IP>:30080
+
+    ## Port-Forward (Any Environment):
+    kubectl port-forward svc/frontend-service 8080:80 -n climbr-viz
+    # Visit: http://localhost:8080
+
+    ## Minikube:
+    minikube service frontend-service -n climbr-viz
