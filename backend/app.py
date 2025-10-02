@@ -11,6 +11,8 @@ with open("loinc.json", "r") as f:
     loinc = json.load(f)
 with open("cpt4.json", "r") as f:
     cpt4 = json.load(f)
+with open("snomed.json", "r") as f:
+    snomed = json.load(f)
 app = Flask(__name__)
 CORS(app)
 cached_paths = None
@@ -57,6 +59,8 @@ def get_pathways():
                         display_name = loinc[code_only]["DisplayName"]
                 if system == 'CPT4' and code_only in cpt4:
                     display_name = cpt4[code_only]
+                if system == 'SNOMED' and code_only in snomed:
+                    display_name = snomed[code_only]
                 pathway['steps'].append({
                     'token': token,
                     'system': system,
@@ -81,6 +85,8 @@ def get_pathways():
                     display_name = loinc[code_only]["DisplayName"]
             if system == 'CPT4' and code_only in cpt4:
                 display_name = cpt4[code_only]
+            if system == 'SNOMED' and code_only in snomed:
+                display_name = snomed[code_only]
             initial_data.append({
                 'code': event.code,
                 'name': display_name,
@@ -165,6 +171,8 @@ def get_predictions():
                     display_name = loinc[code_only]["DisplayName"]
             if system == 'CPT4' and code_only in cpt4:
                 display_name = cpt4[code_only]
+            if system == 'SNOMED' and code_only in snomed:
+                display_name = snomed[code_only]
             predictions.append({
                 'name': display_name,  # Truncate long codes
                 'probability': round(percentage, 1),
