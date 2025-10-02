@@ -182,31 +182,76 @@ const PathwayVisualization = ({ pathwayData, predictions }) => {
               </div>
             </div>
 
-            <div className="space-y-3">
-              {predictions.map((prediction, idx) => {
-                const color = codeColors[prediction.system];
-                return (
-                  <div key = {idx} className="relative">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-gray-700">
-                        {prediction.name}
-                      </span>
-                      <span className="text-sm font-bold" style={{ color }}>
-                        {prediction.probability}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full transition-all duration-500"
-                        style={{
-                          width: `${Math.min(prediction.probability * 2, 100)}%`,
-                          backgroundColor: color
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+            {/* Assessment Category - SNOMED */}
+            <div className="mb-6">
+              <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center">
+                <Stethoscope className="w-4 h-4 mr-2" />
+                Assessment
+              </h3>
+              <div className="space-y-3">
+                {predictions
+                  .filter(pred => pred.system === 'SNOMED')
+                  .map((prediction, idx) => {
+                    const color = codeColors[prediction.system];
+                    return (
+                      <div key={idx} className="relative">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium text-gray-700">
+                            {prediction.name}
+                          </span>
+                          <span className="text-sm font-bold" style={{ color }}>
+                            {prediction.probability}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="h-2 rounded-full transition-all duration-500"
+                            style={{
+                              width: `${Math.min(prediction.probability * 2, 100)}%`,
+                              backgroundColor: color
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Planning Category - CPT4 and LOINC */}
+            <div>
+              <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center">
+                <Activity className="w-4 h-4 mr-2" />
+                Planning
+              </h3>
+              <div className="space-y-3">
+                {predictions
+                  .filter(pred => pred.system === 'CPT4' || pred.system === 'LOINC')
+                  .map((prediction, idx) => {
+                    const color = codeColors[prediction.system];
+                    return (
+                      <div key={idx} className="relative">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium text-gray-700">
+                            {prediction.name}
+                          </span>
+                          <span className="text-sm font-bold" style={{ color }}>
+                            {prediction.probability}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="h-2 rounded-full transition-all duration-500"
+                            style={{
+                              width: `${Math.min(prediction.probability * 2, 100)}%`,
+                              backgroundColor: color
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         </div>

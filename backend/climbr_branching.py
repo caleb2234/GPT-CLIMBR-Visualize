@@ -12,7 +12,7 @@ def run_branching_simulation():
     model = AutoModelForCausalLM.from_pretrained("YaHi/gpt_clmbr")
     tokenizer = CLMBRTokenizer.from_pretrained("YaHi/gpt_clmbr")
     # Initial patient history
-    initial_patient = patient2
+    initial_patient = patient1
 
     class ClinicalPath:
         """Represents a single diagnostic pathway"""
