@@ -16,12 +16,12 @@ function App() {
         setLoading(true);
         
         // Get pathways
-        const pathwaysResponse = await axios.get('http://localhost:5000/api/pathways');
-        
+        const pathwaysResponse = await axios.get('/api/pathways');
+
         setPathwayData(pathwaysResponse.data);
-        
+
         // Get predictions
-        const predictionsResponse = await axios.get('http://localhost:5000/api/predictions');
+        const predictionsResponse = await axios.get('/api/predictions');
         setPredictions(predictionsResponse.data.predictions);
         
         setLoading(false);

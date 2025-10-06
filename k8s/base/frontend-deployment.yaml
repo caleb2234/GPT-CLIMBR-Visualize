@@ -17,10 +17,14 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: your-registry/climbr-frontend:latest
+        image: climbr-frontend:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
           name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
         resources:
           requests:
             memory: "128Mi"
@@ -40,3 +44,7 @@ spec:
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config

@@ -3,7 +3,7 @@ kind: Kustomization
 
 namespace: climbr-viz-dev
 
-bases:
+resources:
   - ../../base
 
 namePrefix: dev-
@@ -15,21 +15,23 @@ replicas:
     count: 1
 
 patches:
+  # Increase memory and CPU for ML models
   - patch: |-
       - op: replace
-        path: /spec/template/spec/containers/0/image
-        value: your-registry/climbr-backend:dev
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "2Gi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "1Gi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "2000m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "1000m"
     target:
       kind: Deployment
       name: backend
-
-  - patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/image
-        value: your-registry/climbr-frontend:dev
-    target:
-      kind: Deployment
-      name: frontend
 
   # Change to NodePort for local development
   - patch: |-
@@ -44,8 +46,8 @@ patches:
       name: frontend-service
 
 configMapGenerator:
-  - name: app-config
-    behavior: merge
-    literals:
-      - flask_env=development
-      - log_level=DEBUG
+  - name: nginx-config
+    files:
+      - default.conf=nginx-dev.conf
+    options:
+      disableNameSuffixHash: true

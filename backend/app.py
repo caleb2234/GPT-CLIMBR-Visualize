@@ -5,21 +5,37 @@ import subprocess
 import sys
 from pathlib import Path
 from climbr_branching import run_branching_simulation
-import json
 
-with open("loinc.json", "r") as f:
-    loinc = json.load(f)
-with open("cpt4.json", "r") as f:
-    cpt4 = json.load(f)
 app = Flask(__name__)
 CORS(app)
+
+# Lazy load these large JSON files only when needed
+loinc = None
+cpt4 = None
 cached_paths = None
 cached_initial_patient = None
+
+def load_code_mappings():
+    """Lazy load LOINC and CPT4 mappings"""
+    global loinc, cpt4
+    if loinc is None:
+        with open("loinc.json", "r") as f:
+            loinc = json.load(f)
+    if cpt4 is None:
+        with open("cpt4.json", "r") as f:
+            cpt4 = json.load(f)
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Simple health check endpoint for k8s probes"""
+    return jsonify({'status': 'healthy'}), 200
+
 @app.route('/api/pathways', methods=['GET'])
 def get_pathways():
     """Run the CLMBR model and return the pathway results"""
     try:
-        
+        load_code_mappings()  # Load JSON files on first request
+
         # Parse the output to extract pathway data
         # This assumes you modify climbr_branching.py to output JSON at the end
         # Or you can parse the current_paths variable directly if imported
@@ -103,6 +119,7 @@ def get_pathways():
 def get_predictions():
     """Get most frequent codes across all pathways"""
     try:
+        load_code_mappings()  # Load JSON files on first request
         from collections import Counter
         
         # Use cached paths if available

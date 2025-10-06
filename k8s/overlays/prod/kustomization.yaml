@@ -3,7 +3,7 @@ kind: Kustomization
 
 namespace: climbr-viz
 
-bases:
+resources:
   - ../../base
 
 namePrefix: prod-

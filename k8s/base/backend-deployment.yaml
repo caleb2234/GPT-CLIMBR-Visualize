@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: your-registry/climbr-backend:latest
+        image: climbr-backend:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
           name: http
@@ -36,21 +37,17 @@ spec:
             cpu: "500m"
         livenessProbe:
           httpGet:
-            path: /api/pathways
+            path: /health
             port: 5000
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          initialDelaySeconds: 180
+          periodSeconds: 30
+          timeoutSeconds: 120
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /api/pathways
+            path: /health
             port: 5000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        volumeMounts:
-        - name: data-volume
-          mountPath: /app/data
-          readOnly: true
-      volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: climbr-data-pvc
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 120
+          failureThreshold: 3

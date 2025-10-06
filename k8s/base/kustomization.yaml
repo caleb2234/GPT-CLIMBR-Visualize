@@ -6,12 +6,12 @@ namespace: climbr-viz
 resources:
   - namespace.yaml
   - configmap.yaml
-  - pvc.yaml
   - backend-deployment.yaml
   - backend-service.yaml
   - frontend-deployment.yaml
   - frontend-service.yaml
   - hpa.yaml
+  # - pvc.yaml  # Uncomment if you need persistent storage
   # - ingress.yaml  # Uncomment if you add a domain later
 
 commonLabels:
